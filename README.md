@@ -1,55 +1,87 @@
-# 📍 Tô Aqui!
+# Travel Planner
 
-**Status do Sistema:**
-[![CI - Develop (Laboratório)](https://github.com/utfpr-gp/to-aqui/actions/workflows/ci.yml/badge.svg)](https://github.com/utfpr-gp/to-aqui/actions/workflows/cy.yml)
-[![CI - Main (Produção)](https://github.com/utfpr-gp/to-aqui/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/utfpr-gp/to-aqui/actions/workflows/cy.yml)
+Status do Sistema: Em desenvolvimento (branch: develop)
 
+Autor: Nicolas Veiga
 
-🔗 **Link em Produção:** [Aguardando Deploy na Nuvem]
+------------------------------------------------------------------------
 
-👨‍💻 **Autores:** [Nome do Aluno A, Nome do Aluno B, Nome do Aluno C]
+## 1. Visão Geral
 
-## 🎯 1. Visão Geral
-Sistema Full-Cycle de registro de presenças acadêmicas utilizando QR Code dinâmico. O sistema permite que o professor projete um QR Code rotativo diretamente do sistema acadêmico da UTFPR via extensão de navegador. Os alunos escaneiam, fazem login com o e-mail institucional do Google, e a presença é validada e preenchida automaticamente na pauta.
+Aplicação Full-Cycle para planejamento de viagens, permitindo que
+usuários criem roteiros personalizados organizados por dias e
+atividades. O sistema auxilia na organização de pontos turísticos dentro
+de uma viagem, simulando um guia inteligente. A proposta vai além de um
+simples catálogo, focando na criação de itinerários completos.
 
-## 📚 2. Documentação Oficial (Docs as Code)
+------------------------------------------------------------------------
+
+## 2. Documentação (Docs as Code)
+
 Toda a especificação do sistema está versionada na pasta `/docs`:
-* 📄 **[PRD (Product Requirements Document)](./docs/prd.md):** Visão do produto, Personas, User Stories e Divisão de Épicos.
-* 📐 **[SDD (Software Design Document)](./docs/sdd.md):** Diagrama de banco de dados (Mermaid), contratos de API, DTOs e Fluxo de Autenticação.
-* ✅ **[Checklist de Avaliação](./docs/checklist.md):** Controle de entrega dos IDs e RAs da disciplina de Tópicos Especiais.
 
-## 🛠 3. Stack Tecnológica
-* **Arquitetura:** Monorepo (Back, Front e Extensão no mesmo repositório).
-* **Backend (API):** NestJS, TypeScript, JWT, Google OAuth.
-* **Banco de Dados:** PostgreSQL (Nuvem) gerenciado via Prisma ORM.
-* **Frontend (Mobile App):** Angular.
-* **Integração:** Extensão de Navegador (Chrome) com manipulação de DOM.
+-   PRD (Product Requirements Document): visão do produto, regras de
+    negócio e user stories\
+-   SDD (Software Design Document): arquitetura, diagrama ER (Mermaid),
+    DTOs e fluxos\
+-   Checklist: controle dos IDs e RAs da disciplina
 
-## 🚀 4. Quick Start (Como Executar)
+------------------------------------------------------------------------
 
-**1. Clone o repositório:**
+## 3. Stack Tecnológica
 
-    git clone https://github.com/seu-usuario/to-aqui.git
-    cd to-aqui
+-   Arquitetura: Monorepo (Backend + Frontend)
+-   Backend: NestJS, TypeScript, JWT
+-   Banco de Dados: PostgreSQL com Prisma ORM
+-   Frontend: (definir: React, Angular ou Vue)
+-   Testes: Jest (TDD guiado por IA)
+-   CI/CD: GitHub Actions (em configuração)
 
-**2. Instale as dependências:**
-Como é um Monorepo, você precisa instalar os pacotes em cada camada:
+------------------------------------------------------------------------
 
-    # Terminal 1 - Iniciar a API NestJS
-    cd apps/api
-    npm install
-    npm run start:dev
+## 4. Quick Start
 
-    # Terminal 2 - Iniciar o Frontend Angular
-    cd apps/web
-    npm install
-    npm run start
+### 1. Clonar o repositório
 
-    # Terminal 3 - Compilar a Extensão
-    cd apps/extension
-    npm install
-    npm run build
+git clone https://github.com/nicolasjveiga/travel-planner.git cd
+travel-planner
 
-**3. Variáveis de Ambiente:**
-Não esqueça de copiar o arquivo `.env.example` para `.env` dentro da pasta `apps/api` e configurar a `DATABASE_URL` do seu PostgreSQL.
+------------------------------------------------------------------------
 
+### 2. Instalar dependências
+
+# Backend
+
+cd apps/api npm install npm run start:dev
+
+# Frontend
+
+cd apps/web npm install npm run dev
+
+------------------------------------------------------------------------
+
+### 3. Variáveis de ambiente
+
+Crie um arquivo `.env` em `apps/api` baseado no `.env.example`:
+
+DATABASE_URL="sua_url_do_postgresql" JWT_SECRET="seu_segredo"
+
+------------------------------------------------------------------------
+
+## 5. Funcionalidades principais
+
+-   Criar e gerenciar viagens\
+-   Organizar roteiros por dias\
+-   Adicionar atividades (pontos turísticos)\
+-   Autenticação com JWT\
+-   Controle de acesso por usuário
+
+------------------------------------------------------------------------
+
+## 6. Fluxo de desenvolvimento
+
+-   main: produção\
+-   develop: desenvolvimento\
+-   feature/\*: novas funcionalidades
+
+Todas as alterações são feitas via Pull Request.
