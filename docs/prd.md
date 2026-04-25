@@ -1,158 +1,80 @@
-# SDD - Travel Planner
+# PRD - Travel Planner
 
-## 1. Arquitetura
+## 1. Visão do Produto
 
-A aplicação será estruturada em formato Monorepo, contendo:
+O Travel Planner é uma aplicação web que permite aos usuários planejar
+viagens de forma estruturada, organizando roteiros por dias e
+atividades. Diferente de sistemas tradicionais de catálogo de pontos
+turísticos, a aplicação foca na criação de itinerários personalizados,
+simulando um guia de viagem inteligente.
 
--   Backend: API REST com NestJS
--   Frontend: aplicação SPA (React/Angular/Vue)
-
-O backend seguirá a arquitetura em camadas:
-
--   Controllers: recebem requisições HTTP
--   Services: implementam regras de negócio
--   Modules: organizam os domínios da aplicação
-
-------------------------------------------------------------------------
-
-## 2. Modelo de Dados (ER Diagram)
-
-``` mermaid
-erDiagram
-    USER ||--o{ TRIP : owns
-    TRIP ||--o{ DAY : contains
-    DAY ||--o{ ACTIVITY : includes
-
-    USER {
-        int id
-        string email
-        string password
-    }
-
-    TRIP {
-        int id
-        string title
-        date startDate
-        date endDate
-        int userId
-    }
-
-    DAY {
-        int id
-        int tripId
-        date date
-    }
-
-    ACTIVITY {
-        int id
-        int dayId
-        string name
-        string description
-        int order
-    }
-```
+O sistema permite que usuários criem viagens, definam períodos,
+organizem atividades por dia e gerenciem seus roteiros de forma segura e
+autenticada.
 
 ------------------------------------------------------------------------
 
-## 3. Dicionário de Entidades
+## 2. Atores do Sistema
 
-### User
-
--   id
--   email
--   password
-
-### Trip
-
--   id
--   title
--   startDate
--   endDate
--   userId (FK)
-
-### Day
-
--   id
--   date
--   tripId (FK)
-
-### Activity
-
--   id
--   name
--   description
--   order
--   dayId (FK)
+-   Usuário autenticado
+-   Sistema (API)
 
 ------------------------------------------------------------------------
 
-## 4. Contratos da API
+## 3. Histórias de Usuário
 
 ### Autenticação
 
-#### POST /auth/register
-
-Entrada:
-
-``` json
-{
-  "email": "string",
-  "password": "string"
-}
-```
-
-#### POST /auth/login
-
-Saída:
-
-``` json
-{
-  "access_token": "jwt"
-}
-```
+-   Como usuário, quero me registrar no sistema para acessar minhas
+    viagens.
+-   Como usuário, quero fazer login para acessar minhas informações de
+    forma segura.
+-   Como usuário, quero acessar apenas meus dados.
 
 ------------------------------------------------------------------------
 
-### Trips
+### Gestão de Viagens
 
-#### GET /trips
-
-Retorna todas as viagens do usuário autenticado
-
-#### POST /trips
-
-``` json
-{
-  "title": "Viagem",
-  "startDate": "2026-05-01",
-  "endDate": "2026-05-05"
-}
-```
+-   Como usuário, quero criar uma nova viagem informando destino e
+    período.
+-   Como usuário, quero visualizar minhas viagens cadastradas.
+-   Como usuário, quero editar ou excluir minhas viagens.
 
 ------------------------------------------------------------------------
 
-### Days
+### Organização de Roteiro
 
-#### POST /trips/:tripId/days
-
-------------------------------------------------------------------------
-
-### Activities
-
-#### POST /days/:dayId/activities
+-   Como usuário, quero dividir minha viagem em dias.
+-   Como usuário, quero adicionar atividades (pontos turísticos) em cada
+    dia.
+-   Como usuário, quero reordenar atividades dentro de um dia.
 
 ------------------------------------------------------------------------
 
-## 5. Segurança
+### Controle de Acesso
 
--   Autenticação via JWT
--   Uso de Guards para proteção de rotas
--   Validação com DTOs e ValidationPipe
+-   Como sistema, devo garantir que um usuário só acesse suas próprias
+    viagens.
+-   Como sistema, devo validar entradas de dados antes de persistir.
 
 ------------------------------------------------------------------------
 
-## 6. Padrões Técnicos
+## 4. Regras de Negócio
 
--   Interceptors para padronização de respostas (ID9)
--   Exception Filters para tratamento global de erros (ID9)
--   Swagger para documentação da API (ID12)
+-   Uma viagem deve pertencer a um único usuário.
+-   Uma viagem pode ter vários dias (1:N).
+-   Um dia pode conter várias atividades (1:N).
+-   Não é permitido adicionar atividades duplicadas no mesmo dia.
+-   Um usuário não pode acessar dados de outro usuário.
+-   A criação e edição de dados requer autenticação JWT.
+-   Os dados devem ser validados antes de serem persistidos.
+
+------------------------------------------------------------------------
+
+## 5. Escopo Técnico (alinhado aos IDs)
+
+-   Uso de autenticação JWT (ID8)
+-   CRUD relacional com Prisma (ID7)
+-   Validação com DTOs (ID6)
+-   Separação de camadas (ID5)
+-   Estrutura pensada para testes automatizados (ID10 e ID11)
