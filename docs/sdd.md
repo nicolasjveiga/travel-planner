@@ -1,127 +1,175 @@
-# SDD - Travel Planner
+# 📐 Software Design Document (SDD) - Travel Planner
 
-## 1. Arquitetura
+**Projeto:** Travel Planner  
+**Versão:** 1.0.0  
+**Status:** 🟢 Pronto para Implementação  
+**Stack Principal:** NestJS, React (Vite), Prisma ORM, PostgreSQL  
 
-A aplicação será estruturada em formato Monorepo, contendo:
+---
 
--   Backend: API REST com NestJS
--   Frontend: aplicação SPA (React/Angular/Vue)
+## 🏗️ 1. Arquitetura do Sistema (Monorepo)
 
-O backend seguirá a arquitetura em camadas:
+O projeto utiliza arquitetura Monorepo.
 
--   Controllers: recebem requisições HTTP
--   Services: implementam regras de negócio
--   Modules: organizam os domínios da aplicação
+- `apps/api` → Backend (NestJS)
+- `apps/web` → Frontend (React + Vite)
 
-------------------------------------------------------------------------
+---
 
-## 2. Modelo de Dados (ER Diagram)
+## 🤖 2. Orquestração e Ecossistema (MCP)
 
-``` mermaid
+> **Instrução para a IA:** Sempre utilizar MCP antes de sugerir mudanças estruturais.
+
+- **GitHub MCP:** Criar e atualizar Issues e Kanban
+- **Neon MCP:** Gerenciar banco PostgreSQL
+- **Prisma ORM:** Interface com banco de dados
+
+---
+
+## 📦 3. Stack Tecnológica e Versões
+
+### Core
+- Node.js v20.x
+- PostgreSQL 16 (Neon.tech)
+- NestJS v10.x
+- React (Vite)
+
+### Backend
+- Prisma ORM v5.x
+- JWT Auth (`@nestjs/jwt`)
+- Validation (`class-validator`)
+- Swagger (`@nestjs/swagger`)
+
+---
+
+## 🗄️ 4. Arquitetura de Dados
+
+### 📖 Glossário
+
+| PT-BR | EN |
+|------|----|
+| Usuário | User |
+| Viagem | Trip |
+| Dia | Day |
+| Atividade | Activity |
+
+---
+
+### 🧩 Diagrama
+
+```mermaid
 erDiagram
     USER ||--o{ TRIP : owns
     TRIP ||--o{ DAY : contains
     DAY ||--o{ ACTIVITY : includes
 
     USER {
-        int id
+        int id PK
         string email
         string password
     }
 
     TRIP {
-        int id
+        int id PK
         string title
         date startDate
         date endDate
-        int userId
+        int userId FK
     }
 
     DAY {
-        int id
-        int tripId
+        int id PK
         date date
+        int tripId FK
     }
 
     ACTIVITY {
-        int id
-        int dayId
+        int id PK
         string name
         string description
         int order
+        int dayId FK
     }
 ```
 
-------------------------------------------------------------------------
+---
 
-## 3. Dicionário de Entidades
+## 📑 5. DTOs (Contratos Globais)
 
-### User
+- RegisterDTO → `{ email, password }`
+- LoginDTO → `{ email, password }`
+- CreateTripDTO → `{ title, startDate, endDate }`
+- CreateDayDTO → `{ date }`
+- CreateActivityDTO → `{ name, description, order }`
 
--   id
--   email
--   password
+---
 
-### Trip
+## 🏗️ 6. Arquitetura Backend
 
--   id
--   title
--   startDate
--   endDate
--   userId (FK)
+> **Instrução para a IA:** Seguir padrão NestJS CLI
 
-### Day
+```
+src/
+  auth/
+  trips/
+  days/
+  activities/
+  common/
+  prisma/
+```
 
--   id
--   date
--   tripId (FK)
+---
 
-### Activity
+## 🛡️ 7. Segurança
 
--   id
--   name
--   description
--   order
--   dayId (FK)
+- JWT obrigatório
+- Usuário só acessa seus dados
+- ValidationPipe global
+- ExceptionFilter global
 
-------------------------------------------------------------------------
+Formato de erro:
 
-## 4. Contratos da API
+```json
+{
+  "statusCode": 400,
+  "timestamp": "2026-01-01",
+  "path": "/api",
+  "message": "Erro"
+}
+```
 
-### Autenticação
+---
 
-#### POST /auth/register
+## 📡 8. Contratos de API
 
-Entrada:
+### Auth
 
-``` json
+POST `/auth/register`
+
+```json
 {
   "email": "string",
   "password": "string"
 }
 ```
 
-#### POST /auth/login
+POST `/auth/login`
 
-Saída:
-
-``` json
+```json
 {
   "access_token": "jwt"
 }
 ```
 
-------------------------------------------------------------------------
+---
 
 ### Trips
 
-#### GET /trips
+GET `/trips`
 
-Retorna todas as viagens do usuário autenticado
+POST `/trips`
 
-#### POST /trips
-
-``` json
+```json
 {
   "title": "Viagem",
   "startDate": "2026-05-01",
@@ -129,30 +177,27 @@ Retorna todas as viagens do usuário autenticado
 }
 ```
 
-------------------------------------------------------------------------
+PUT `/trips/:id`  
+DELETE `/trips/:id`
+
+---
 
 ### Days
 
-#### POST /trips/:tripId/days
+POST `/trips/:tripId/days`
 
-------------------------------------------------------------------------
+---
 
 ### Activities
 
-#### POST /days/:dayId/activities
+POST `/days/:dayId/activities`
 
-------------------------------------------------------------------------
+---
 
-## 5. Segurança
+## ⚙️ 9. Environment
 
--   Autenticação via JWT
--   Uso de Guards para proteção de rotas
--   Validação com DTOs e ValidationPipe
-
-------------------------------------------------------------------------
-
-## 6. Padrões Técnicos
-
--   Interceptors para padronização de respostas (ID9)
--   Exception Filters para tratamento global de erros (ID9)
--   Swagger para documentação da API (ID12)
+```
+DATABASE_URL=
+JWT_SECRET=
+JWT_EXPIRES_IN=8h
+```
