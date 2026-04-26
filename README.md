@@ -33,7 +33,7 @@ Toda a especificação do sistema está versionada na pasta `/docs`:
 -   Arquitetura: Monorepo (Backend + Frontend)
 -   Backend: NestJS, TypeScript, JWT
 -   Banco de Dados: PostgreSQL com Prisma ORM
--   Frontend: (definir: React, Angular ou Vue)
+-   Frontend: React (Vite)
 -   Testes: Jest (TDD guiado por IA)
 -   CI/CD: GitHub Actions (em configuração)
 

@@ -13,6 +13,7 @@ const auth_module_1 = require("./auth/auth.module");
 const trips_module_1 = require("./trips/trips.module");
 const days_module_1 = require("./days/days.module");
 const activities_module_1 = require("./activities/activities.module");
+const tourist_spot_module_1 = require("./tourist-spot/tourist-spot.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,6 +25,7 @@ exports.AppModule = AppModule = __decorate([
             trips_module_1.TripsModule,
             days_module_1.DaysModule,
             activities_module_1.ActivitiesModule,
+            tourist_spot_module_1.TouristSpotModule,
         ],
     })
 ], AppModule);
