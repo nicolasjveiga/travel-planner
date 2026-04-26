@@ -52,6 +52,7 @@ O projeto utiliza arquitetura Monorepo.
 | Viagem | Trip |
 | Dia | Day |
 | Atividade | Activity |
+| Pontos turísticos | TouristSpot |
 
 ---
 
@@ -62,6 +63,7 @@ erDiagram
     USER ||--o{ TRIP : owns
     TRIP ||--o{ DAY : contains
     DAY ||--o{ ACTIVITY : includes
+    TOURIST_SPOT ||--o{ ACTIVITY : references
 
     USER {
         int id PK
@@ -72,6 +74,7 @@ erDiagram
     TRIP {
         int id PK
         string title
+        string destination
         date startDate
         date endDate
         int userId FK
@@ -89,18 +92,37 @@ erDiagram
         string description
         int order
         int dayId FK
+        int touristSpotId FK "nullable"
+    }
+
+    TOURIST_SPOT {
+        int id PK
+        string name
+        string description
+        string city
     }
 ```
 
 ---
 
+## 🔗 Relacionamentos
+
+- USER 1:N TRIP → um usuário pode ter várias viagens
+- TRIP 1:N DAY → uma viagem possui vários dias
+- DAY 1:N ACTIVITY → um dia possui várias atividades
+- TOURIST_SPOT 1:N ACTIVITY → um ponto turístico pode estar associado a várias atividades
+- ACTIVITY → pode ou não estar vinculada a um ponto turístico (relação opcional)
+
+--- 
+
 ## 📑 5. DTOs (Contratos Globais)
 
 - RegisterDTO → `{ email, password }`
 - LoginDTO → `{ email, password }`
-- CreateTripDTO → `{ title, startDate, endDate }`
+- CreateTripDTO → `{ title, destination, startDate, endDate }`
+- CreateTouristSpotDTO → `{ name, description, city }`
 - CreateDayDTO → `{ date }`
-- CreateActivityDTO → `{ name, description, order }`
+- CreateActivityDTO → `{ name, description, order, touristSpotId? }`
 
 ---
 
@@ -114,8 +136,9 @@ src/
   trips/
   days/
   activities/
+  tourist-spots/
   common/
-  prisma/
+  prisma/ 
 ```
 
 ---
@@ -172,6 +195,7 @@ POST `/trips`
 ```json
 {
   "title": "Viagem",
+  "destination": "Paris",
   "startDate": "2026-05-01",
   "endDate": "2026-05-05"
 }
@@ -185,6 +209,20 @@ DELETE `/trips/:id`
 ### Days
 
 POST `/trips/:tripId/days`
+
+---
+
+### Tourist Spot
+
+POST `/tourist-spots`
+
+```json
+{
+  "name": "Cristo Redentor",
+  "description": "Ponto turístico famoso",
+  "city": "Rio de Janeiro"
+}
+```
 
 ---
 
