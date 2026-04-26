@@ -52,6 +52,7 @@ O projeto utiliza arquitetura Monorepo.
 | Viagem | Trip |
 | Dia | Day |
 | Atividade | Activity |
+| Pontos turísticos | TouristSpot |
 
 ---
 
@@ -135,8 +136,9 @@ src/
   trips/
   days/
   activities/
+  tourist-spots/
   common/
-  prisma/
+  prisma/ 
 ```
 
 ---
@@ -193,6 +195,7 @@ POST `/trips`
 ```json
 {
   "title": "Viagem",
+  "destination": "Paris",
   "startDate": "2026-05-01",
   "endDate": "2026-05-05"
 }
