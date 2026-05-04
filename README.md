@@ -1,8 +1,10 @@
 # Travel Planner
 
-Status do Sistema: Em desenvolvimento (branch: develop)
+🚧 **Status:** Em desenvolvimento (branch: develop)
 
-Autor: Nicolas Veiga
+👤 **Autor:** Nicolas Veiga
+
+🔗 [Protótipo](https://stitch.withgoogle.com/projects/14788849580947901087)
 
 ------------------------------------------------------------------------
 
