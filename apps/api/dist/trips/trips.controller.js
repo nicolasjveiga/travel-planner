@@ -15,15 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TripsController = void 0;
 const common_1 = require("@nestjs/common");
 const trips_service_1 = require("./trips.service");
+const create_trip_dto_1 = require("./dto/create-trip.dto");
+const query_trip_dto_1 = require("./dto/query-trip.dto");
 let TripsController = class TripsController {
     constructor(tripsService) {
         this.tripsService = tripsService;
     }
-    create(tripData) {
-        return this.tripsService.create(tripData);
+    create(createTripDto) {
+        return this.tripsService.create(createTripDto);
     }
-    findAll() {
-        return this.tripsService.findAll();
+    findAll(query) {
+        return this.tripsService.findAll(query.destination, query.page);
     }
     findOne(id) {
         return this.tripsService.findOne(id);
@@ -38,24 +40,24 @@ let TripsController = class TripsController {
 exports.TripsController = TripsController;
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Object)
+    __metadata("design:paramtypes", [create_trip_dto_1.CreateTripDto]),
+    __metadata("design:returntype", void 0)
 ], TripsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Array)
+    __metadata("design:paramtypes", [query_trip_dto_1.QueryTripDto]),
+    __metadata("design:returntype", void 0)
 ], TripsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Object)
+    __metadata("design:returntype", void 0)
 ], TripsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Put)(':id'),

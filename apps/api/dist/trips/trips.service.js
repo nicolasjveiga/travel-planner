@@ -21,8 +21,15 @@ let TripsService = class TripsService {
         this.trips.push(newTrip);
         return newTrip;
     }
-    findAll() {
-        return this.trips;
+    findAll(destination, page = 1) {
+        let result = this.trips;
+        if (destination) {
+            result = result.filter((trip) => trip.destination
+                .toLowerCase()
+                .includes(destination.toLowerCase()));
+        }
+        const pageSize = 5;
+        return result.slice((page - 1) * pageSize, page * pageSize);
     }
     findOne(id) {
         const trip = this.trips.find((t) => t.id === id);
