@@ -27,11 +27,17 @@ __decorate([
     __metadata("design:type", String)
 ], CreateTripDto.prototype, "destination", void 0);
 __decorate([
-    (0, class_validator_1.IsDateString)({}, { message: 'A data inicial deve possuir formato válido.' }),
+    (0, class_transformer_1.Type)(() => Date),
+    (0, class_validator_1.IsDate)({
+        message: 'A data inicial deve possuir formato válido.',
+    }),
     __metadata("design:type", Date)
 ], CreateTripDto.prototype, "startDate", void 0);
 __decorate([
-    (0, class_validator_1.IsDateString)({}, { message: 'A data final deve possuir formato válido.' }),
+    (0, class_transformer_1.Type)(() => Date),
+    (0, class_validator_1.IsDate)({
+        message: 'A data final deve possuir formato válido.',
+    }),
     __metadata("design:type", Date)
 ], CreateTripDto.prototype, "endDate", void 0);
 __decorate([

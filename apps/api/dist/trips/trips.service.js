@@ -8,12 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TripsService = void 0;
 const common_1 = require("@nestjs/common");
+const invalid_trip_date_exception_1 = require("./exceptions/invalid-trip-date.exception");
 let TripsService = class TripsService {
     constructor() {
         this.trips = [];
         this.idCounter = 1;
     }
     create(tripData) {
+        if (tripData.endDate < tripData.startDate) {
+            throw new invalid_trip_date_exception_1.InvalidTripDateException(tripData.startDate, tripData.endDate);
+        }
         const newTrip = {
             id: this.idCounter++,
             ...tripData,

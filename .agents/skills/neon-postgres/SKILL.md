@@ -7,7 +7,7 @@ description: Guides and best practices for working with Neon Serverless Postgres
 
 Neon is a serverless Postgres platform that separates compute and storage to offer autoscaling, branching, instant restore, and scale-to-zero. It's fully compatible with Postgres and works with any language, framework, or ORM that supports Postgres.
 
-## Neon Documentation
+## Neon DocumentationS
 
 The Neon documentation is the source of truth for all Neon-related information. Always verify claims against the official docs before responding. Neon features and APIs evolve, so prefer fetching current docs over relying on training data.
 

@@ -10,14 +10,17 @@ import {
   HttpStatus,
   ParseIntPipe,
   Query,
+  UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TripsService } from './trips.service';
 import { Trip } from './interfaces/trip.interface';
-import { CreateTripDto } from './dto/create-trip.dto';
 import { QueryTripDto } from './dto/query-trip.dto';
-import { UseInterceptors } from '@nestjs/common';
+import { CreateTripDto } from './dto/create-trip.dto';
+import { TripBusinessFilter } from './filters/trip-business.filter';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
+@UseFilters(TripBusinessFilter)
 @UseInterceptors(TransformInterceptor)
 @Controller('trips')
 export class TripsController {
