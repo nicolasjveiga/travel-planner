@@ -1,29 +1,51 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Trip } from './interfaces/trip.interface';
+import { CreateTripDto } from './dto/create-trip.dto';
 
 @Injectable()
 export class TripsService {
   private trips: Trip[] = [];
   private idCounter = 1;
 
-  create(tripData: Omit<Trip, 'id'>): Trip {
+  create(tripData: CreateTripDto): Trip {
     const newTrip: Trip = {
       id: this.idCounter++,
       ...tripData,
     };
+
     this.trips.push(newTrip);
+
     return newTrip;
   }
 
-  findAll(): Trip[] {
-    return this.trips;
+  findAll(destination?: string, page: number = 1): Trip[] {
+    let result = this.trips;
+
+    if (destination) {
+      result = result.filter((trip) =>
+        trip.destination
+          .toLowerCase()
+          .includes(destination.toLowerCase()),
+      );
+    }
+
+    const pageSize = 5;
+
+    return result.slice(
+      (page - 1) * pageSize,
+      page * pageSize,
+    );
   }
 
   findOne(id: number): Trip {
     const trip = this.trips.find((t) => t.id === id);
+
     if (!trip) {
-      throw new NotFoundException(`Trip with ID ${id} not found`);
+      throw new NotFoundException(
+        `Trip with ID ${id} not found`,
+      );
     }
+
     return trip;
   }
 

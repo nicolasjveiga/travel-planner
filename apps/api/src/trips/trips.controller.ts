@@ -9,27 +9,35 @@ import {
   HttpCode,
   HttpStatus,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { TripsService } from './trips.service';
 import { Trip } from './interfaces/trip.interface';
+import { CreateTripDto } from './dto/create-trip.dto';
+import { QueryTripDto } from './dto/query-trip.dto';
 
 @Controller('trips')
 export class TripsController {
   constructor(private readonly tripsService: TripsService) { }
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() tripData: Omit<Trip, 'id'>): Trip {
-    return this.tripsService.create(tripData);
+  create(@Body() createTripDto: CreateTripDto) {
+    return this.tripsService.create(createTripDto);
   }
 
   @Get()
-  findAll(): Trip[] {
-    return this.tripsService.findAll();
+  findAll(@Query() query: QueryTripDto) {
+    return this.tripsService.findAll(
+      query.destination,
+      query.page,
+    );
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Trip {
+  findOne(
+    @Param('id', ParseIntPipe)
+    id: number,
+  ) {
     return this.tripsService.findOne(id);
   }
 
