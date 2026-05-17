@@ -17,6 +17,8 @@ const common_1 = require("@nestjs/common");
 const trips_service_1 = require("./trips.service");
 const create_trip_dto_1 = require("./dto/create-trip.dto");
 const query_trip_dto_1 = require("./dto/query-trip.dto");
+const common_2 = require("@nestjs/common");
+const transform_interceptor_1 = require("../common/interceptors/transform.interceptor");
 let TripsController = class TripsController {
     constructor(tripsService) {
         this.tripsService = tripsService;
@@ -76,6 +78,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TripsController.prototype, "remove", null);
 exports.TripsController = TripsController = __decorate([
+    (0, common_2.UseInterceptors)(transform_interceptor_1.TransformInterceptor),
     (0, common_1.Controller)('trips'),
     __metadata("design:paramtypes", [trips_service_1.TripsService])
 ], TripsController);

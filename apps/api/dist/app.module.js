@@ -14,7 +14,13 @@ const trips_module_1 = require("./trips/trips.module");
 const days_module_1 = require("./days/days.module");
 const activities_module_1 = require("./activities/activities.module");
 const tourist_spot_module_1 = require("./tourist-spot/tourist-spot.module");
+const logger_middleware_1 = require("./common/middleware/logger.middleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer
+            .apply(logger_middleware_1.LoggerMiddleware)
+            .forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
