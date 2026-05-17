@@ -1,9 +1,9 @@
 import {
     IsString,
-    IsDateString,
     IsInt,
     Min,
     MinLength,
+    IsDate,
 } from 'class-validator';
 
 import { Type } from 'class-transformer';
@@ -18,16 +18,16 @@ export class CreateTripDto {
     @IsString({ message: 'O destino deve ser uma string válida.' })
     destination: string;
 
-    @IsDateString(
-        {},
-        { message: 'A data inicial deve possuir formato válido.' },
-    )
+    @Type(() => Date)
+    @IsDate({
+        message: 'A data inicial deve possuir formato válido.',
+    })
     startDate: Date;
 
-    @IsDateString(
-        {},
-        { message: 'A data final deve possuir formato válido.' },
-    )
+    @Type(() => Date)
+    @IsDate({
+        message: 'A data final deve possuir formato válido.',
+    })
     endDate: Date;
 
     @Type(() => Number)

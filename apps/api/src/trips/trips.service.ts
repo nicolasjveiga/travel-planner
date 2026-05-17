@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { Trip } from './interfaces/trip.interface';
 import { CreateTripDto } from './dto/create-trip.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InvalidTripDateException } from './exceptions/invalid-trip-date.exception';
 
 @Injectable()
 export class TripsService {
@@ -8,6 +9,12 @@ export class TripsService {
   private idCounter = 1;
 
   create(tripData: CreateTripDto): Trip {
+    if (tripData.endDate < tripData.startDate) {
+      throw new InvalidTripDateException(
+        tripData.startDate,
+        tripData.endDate,
+      );
+    }
     const newTrip: Trip = {
       id: this.idCounter++,
       ...tripData,

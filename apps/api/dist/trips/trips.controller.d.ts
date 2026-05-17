@@ -1,7 +1,7 @@
 import { TripsService } from './trips.service';
 import { Trip } from './interfaces/trip.interface';
-import { CreateTripDto } from './dto/create-trip.dto';
 import { QueryTripDto } from './dto/query-trip.dto';
+import { CreateTripDto } from './dto/create-trip.dto';
 export declare class TripsController {
     private readonly tripsService;
     constructor(tripsService: TripsService);
