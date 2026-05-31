@@ -1,51 +1,63 @@
-import { Trip } from './interfaces/trip.interface';
+import {
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+
+import { PrismaService } from '../prisma/prisma.service';
+
 import { CreateTripDto } from './dto/create-trip.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { InvalidTripDateException } from './exceptions/invalid-trip-date.exception';
 
 @Injectable()
 export class TripsService {
-  private trips: Trip[] = [];
-  private idCounter = 1;
+  constructor(
+    private readonly prisma: PrismaService,
+  ) { }
 
-  create(tripData: CreateTripDto): Trip {
-    if (tripData.endDate < tripData.startDate) {
+  async create(createTripDto: CreateTripDto) {
+    const startDate = new Date(createTripDto.startDate);
+    const endDate = new Date(createTripDto.endDate);
+
+    if (endDate < startDate) {
       throw new InvalidTripDateException(
-        tripData.startDate,
-        tripData.endDate,
+        startDate,
+        endDate,
       );
     }
-    const newTrip: Trip = {
-      id: this.idCounter++,
-      ...tripData,
-    };
 
-    this.trips.push(newTrip);
-
-    return newTrip;
+    return this.prisma.trip.create({
+      data: {
+        ...createTripDto,
+        startDate,
+        endDate,
+      },
+    });
   }
 
-  findAll(destination?: string, page: number = 1): Trip[] {
-    let result = this.trips;
-
-    if (destination) {
-      result = result.filter((trip) =>
-        trip.destination
-          .toLowerCase()
-          .includes(destination.toLowerCase()),
-      );
-    }
-
+  async findAll(
+    destination?: string,
+    page: number = 1,
+  ) {
     const pageSize = 5;
 
-    return result.slice(
-      (page - 1) * pageSize,
-      page * pageSize,
-    );
+    return this.prisma.trip.findMany({
+      where: destination
+        ? {
+          destination: {
+            contains: destination,
+          },
+        }
+        : {},
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
   }
 
-  findOne(id: number): Trip {
-    const trip = this.trips.find((t) => t.id === id);
+  async findOne(id: number) {
+    const trip = await this.prisma.trip.findUnique({
+      where: { id },
+    });
 
     if (!trip) {
       throw new NotFoundException(
@@ -56,21 +68,47 @@ export class TripsService {
     return trip;
   }
 
-  update(id: number, updateData: Partial<Trip>): Trip {
-    const trip = this.findOne(id);
-    const updatedTrip = { ...trip, ...updateData, id };
+  async update(
+    id: number,
+    updateData: Partial<CreateTripDto>,
+  ) {
+    await this.findOne(id);
 
-    const index = this.trips.findIndex((t) => t.id === id);
-    this.trips[index] = updatedTrip;
+    let startDate = updateData.startDate;
+    let endDate = updateData.endDate;
 
-    return updatedTrip;
+    if (updateData.startDate) {
+      startDate = new Date(updateData.startDate);
+    }
+
+    if (updateData.endDate) {
+      endDate = new Date(updateData.endDate);
+    }
+
+    if (startDate && endDate) {
+      if (endDate < startDate) {
+        throw new InvalidTripDateException(
+          startDate,
+          endDate,
+        );
+      }
+    }
+
+    return this.prisma.trip.update({
+      where: { id },
+      data: {
+        ...updateData,
+        startDate,
+        endDate,
+      },
+    });
   }
 
-  remove(id: number): void {
-    const index = this.trips.findIndex((t) => t.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Trip with ID ${id} not found`);
-    }
-    this.trips.splice(index, 1);
+  async remove(id: number) {
+    await this.findOne(id);
+
+    return this.prisma.trip.delete({
+      where: { id },
+    });
   }
 }

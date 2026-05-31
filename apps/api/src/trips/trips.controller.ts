@@ -13,26 +13,35 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
+
 import { TripsService } from './trips.service';
-import { Trip } from './interfaces/trip.interface';
+
 import { QueryTripDto } from './dto/query-trip.dto';
 import { CreateTripDto } from './dto/create-trip.dto';
+
 import { TripBusinessFilter } from './filters/trip-business.filter';
+
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
 @UseFilters(TripBusinessFilter)
 @UseInterceptors(TransformInterceptor)
 @Controller('trips')
 export class TripsController {
-  constructor(private readonly tripsService: TripsService) { }
+  constructor(
+    private readonly tripsService: TripsService,
+  ) { }
 
   @Post()
-  create(@Body() createTripDto: CreateTripDto) {
+  async create(
+    @Body() createTripDto: CreateTripDto,
+  ) {
     return this.tripsService.create(createTripDto);
   }
 
   @Get()
-  findAll(@Query() query: QueryTripDto) {
+  async findAll(
+    @Query() query: QueryTripDto,
+  ) {
     return this.tripsService.findAll(
       query.destination,
       query.page,
@@ -40,7 +49,7 @@ export class TripsController {
   }
 
   @Get(':id')
-  findOne(
+  async findOne(
     @Param('id', ParseIntPipe)
     id: number,
   ) {
@@ -48,17 +57,25 @@ export class TripsController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateData: Partial<Trip>,
-  ): Trip {
-    return this.tripsService.update(id, updateData);
+  async update(
+    @Param('id', ParseIntPipe)
+    id: number,
+
+    @Body()
+    updateData: Partial<CreateTripDto>,
+  ) {
+    return this.tripsService.update(
+      id,
+      updateData,
+    );
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: number): void {
+  async remove(
+    @Param('id', ParseIntPipe)
+    id: number,
+  ) {
     return this.tripsService.remove(id);
   }
 }
-

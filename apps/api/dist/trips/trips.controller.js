@@ -23,19 +23,19 @@ let TripsController = class TripsController {
     constructor(tripsService) {
         this.tripsService = tripsService;
     }
-    create(createTripDto) {
+    async create(createTripDto) {
         return this.tripsService.create(createTripDto);
     }
-    findAll(query) {
+    async findAll(query) {
         return this.tripsService.findAll(query.destination, query.page);
     }
-    findOne(id) {
+    async findOne(id) {
         return this.tripsService.findOne(id);
     }
-    update(id, updateData) {
+    async update(id, updateData) {
         return this.tripsService.update(id, updateData);
     }
-    remove(id) {
+    async remove(id) {
         return this.tripsService.remove(id);
     }
 };
@@ -45,21 +45,21 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_trip_dto_1.CreateTripDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TripsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [query_trip_dto_1.QueryTripDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TripsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TripsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Put)(':id'),
@@ -67,7 +67,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Object)
+    __metadata("design:returntype", Promise)
 ], TripsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
@@ -75,7 +75,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TripsController.prototype, "remove", null);
 exports.TripsController = TripsController = __decorate([
     (0, common_1.UseFilters)(trip_business_filter_1.TripBusinessFilter),
