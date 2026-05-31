@@ -4,23 +4,23 @@ export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(data: CreateUserDto): Promise<{
+        id: number;
         email: string;
         password: string;
-        id: number;
     }>;
     findAll(): Promise<{
+        id: number;
         email: string;
         password: string;
-        id: number;
     }[]>;
     findOne(id: number): Promise<{
+        id: number;
         email: string;
         password: string;
-        id: number;
     }>;
     remove(id: number): Promise<{
+        id: number;
         email: string;
         password: string;
-        id: number;
     }>;
 }

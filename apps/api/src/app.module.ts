@@ -19,6 +19,7 @@ import { UsersModule } from './users/users.module';
     TouristSpotModule,
     PrismaModule,
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {
