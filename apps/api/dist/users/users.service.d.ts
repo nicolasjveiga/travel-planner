@@ -7,20 +7,24 @@ export declare class UsersService {
         id: number;
         email: string;
         password: string;
+        role: import(".prisma/client").$Enums.Role;
     }>;
     findAll(): Promise<{
         id: number;
         email: string;
         password: string;
+        role: import(".prisma/client").$Enums.Role;
     }[]>;
     findOne(id: number): Promise<{
         id: number;
         email: string;
         password: string;
+        role: import(".prisma/client").$Enums.Role;
     }>;
     remove(id: number): Promise<{
         id: number;
         email: string;
         password: string;
+        role: import(".prisma/client").$Enums.Role;
     }>;
 }

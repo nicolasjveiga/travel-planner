@@ -8,6 +8,7 @@ import { TouristSpotModule } from './tourist-spot/tourist-spot.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
+import { AdminController } from './auth/admin.controller';
 
 @Module({
   imports: [
@@ -19,7 +20,6 @@ import { UsersModule } from './users/users.module';
     TouristSpotModule,
     PrismaModule,
     UsersModule,
-    AuthModule,
   ],
 })
 export class AppModule implements NestModule {

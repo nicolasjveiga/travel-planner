@@ -35,6 +35,7 @@ let AuthService = class AuthService {
             select: {
                 id: true,
                 email: true,
+                role: true,
             },
         });
     }
@@ -52,6 +53,7 @@ let AuthService = class AuthService {
         const payload = {
             sub: user.id,
             email: user.email,
+            role: user.role,
         };
         return {
             access_token: await this.jwtService.signAsync(payload),

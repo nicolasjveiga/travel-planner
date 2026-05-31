@@ -4,9 +4,11 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AdminController } from './admin.controller';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtStrategy } from './jwt.strategy';
+import { RolesGuard } from './roles.guard';
 
 @Module({
   imports: [
@@ -21,11 +23,17 @@ import { JwtStrategy } from './jwt.strategy';
       },
     }),
   ],
-  controllers: [AuthController],
+
+  controllers: [
+    AuthController,
+    AdminController,
+  ],
+
   providers: [
     AuthService,
     PrismaService,
     JwtStrategy,
+    RolesGuard,
   ],
 })
 export class AuthModule { }
