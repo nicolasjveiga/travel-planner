@@ -15,6 +15,8 @@ const days_module_1 = require("./days/days.module");
 const activities_module_1 = require("./activities/activities.module");
 const tourist_spot_module_1 = require("./tourist-spot/tourist-spot.module");
 const logger_middleware_1 = require("./common/middleware/logger.middleware");
+const prisma_module_1 = require("./prisma/prisma.module");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -32,6 +34,8 @@ exports.AppModule = AppModule = __decorate([
             days_module_1.DaysModule,
             activities_module_1.ActivitiesModule,
             tourist_spot_module_1.TouristSpotModule,
+            prisma_module_1.PrismaModule,
+            users_module_1.UsersModule,
         ],
     })
 ], AppModule);

@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  trips    Trip[]
+
+  @@map("users")
+}
+
+model Trip {
+  id          Int      @id @default(autoincrement())
+  title       String
+  destination String
+  startDate   DateTime
+  endDate     DateTime
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  days        Day[]
+
+  @@index([userId])
+  @@map("trips")
+}
+
+model Day {
+  id         Int        @id @default(autoincrement())
+  date       DateTime
+  tripId     Int
+  trip       Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  activities Activity[]
+
+  @@index([tripId])
+  @@map("days")
+}
+
+model Activity {
+  id            Int          @id @default(autoincrement())
+  name          String
+  description   String
+  order         Int
+  dayId         Int
+  day           Day          @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  touristSpotId Int?
+  touristSpot   TouristSpot? @relation(fields: [touristSpotId], references: [id], onDelete: SetNull)
+
+  @@index([dayId])
+  @@index([touristSpotId])
+  @@map("activities")
+}
+
+model TouristSpot {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  city        String
+  activities  Activity[]
+
+  @@map("tourist_spots")
+}

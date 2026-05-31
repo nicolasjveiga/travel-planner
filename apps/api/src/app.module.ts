@@ -6,6 +6,8 @@ import { DaysModule } from './days/days.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { TouristSpotModule } from './tourist-spot/tourist-spot.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { PrismaModule } from './prisma/prisma.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     DaysModule,
     ActivitiesModule,
     TouristSpotModule,
+    PrismaModule,
+    UsersModule,
   ],
 })
 export class AppModule implements NestModule {
