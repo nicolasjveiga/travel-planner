@@ -43,6 +43,7 @@ export class AuthService {
             select: {
                 id: true,
                 email: true,
+                role: true,
             },
         });
     }
@@ -77,6 +78,7 @@ export class AuthService {
         const payload = {
             sub: user.id,
             email: user.email,
+            role: user.role,
         };
 
         return {

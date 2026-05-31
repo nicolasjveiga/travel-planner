@@ -7,6 +7,7 @@ export declare class AuthService {
     register(email: string, password: string): Promise<{
         id: number;
         email: string;
+        role: import(".prisma/client").$Enums.Role;
     }>;
     login(email: string, password: string): Promise<{
         access_token: string;
