@@ -36,6 +36,7 @@ exports.AppModule = AppModule = __decorate([
             tourist_spot_module_1.TouristSpotModule,
             prisma_module_1.PrismaModule,
             users_module_1.UsersModule,
+            auth_module_1.AuthModule,
         ],
     })
 ], AppModule);
