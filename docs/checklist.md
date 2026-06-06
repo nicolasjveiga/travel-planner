@@ -1,6 +1,6 @@
 # 📖 Checklist de Avaliação | ID & RA
 
-> **Projeto:** Tô Aqui! (AutoPresence UTFPR)  
+> **Projeto:** Travel Planner  
 > **Disciplina:** Tópicos Especiais em Programação  
 > **Docente:** Roni Fabio Banaszewski
 
@@ -15,17 +15,17 @@
 ---
 
 ## ⚙️ RA2 - Desenvolvimento Backend Assistido por IA
-* [ ] **ID5:** O código NestJS mantém **separação estrita de camadas** arquiteturais (Controllers, Services, Modules).
-* [ ] **ID6:** Aplicou **DTOs** e `ValidationPipes` (com `whitelist`) para blindar as entradas da API.
-* [ ] **ID7:** Implementou operações **CRUD relacionais** utilizando Prisma ORM.
-* [ ] **ID8:** Configurou **autenticação JWT** e protegeu rotas através de controle de acesso (Roles/Guards).
-* [ ] **ID9:** Padronizou o tráfego com **Interceptors** para respostas e **Exception Filters** globais para erros.
+* [x] **ID5:** O código NestJS mantém **separação estrita de camadas** arquiteturais (Controllers, Services, Modules).
+* [x] **ID6:** Aplicou **DTOs** e `ValidationPipes` (com `whitelist`) para blindar as entradas da API.
+* [x] **ID7:** Implementou operações **CRUD relacionais** utilizando Prisma ORM.
+* [x] **ID8:** Configurou **autenticação JWT** e protegeu rotas através de controle de acesso (Roles/Guards).
+* [x] **ID9:** Padronizou o tráfego com **Interceptors** para respostas e **Exception Filters** globais para erros.
 
 ---
 
 ## 🧪 RA3 - Qualidade de Software e TDD Guiado por IA
-* [ ] **ID10:** Orquestrou a IA no fluxo **TDD**, gerando testes automatizados (Jest) baseados nas Issues antes da implementação da lógica.
-* [ ] **ID11:** Os **testes** locais ou no pipeline executam com sucesso, cobrindo caminhos de sucesso e erro.
+* [x] **ID10:** Orquestrou a IA no fluxo **TDD**, gerando testes automatizados (Jest) baseados nas Issues antes da implementação da lógica.
+* [x] **ID11:** Os **testes** locais ou no pipeline executam com sucesso, cobrindo caminhos de sucesso e erro.
 
 ---
 
