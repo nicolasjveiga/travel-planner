@@ -14,11 +14,14 @@ let HttpExceptionFilter = class HttpExceptionFilter {
         const response = ctx.getResponse();
         const request = ctx.getRequest();
         const status = exception.getStatus();
+        const exceptionResponse = exception.getResponse();
         response.status(status).json({
             success: false,
             statusCode: status,
             path: request.url,
-            message: exception.message,
+            message: typeof exceptionResponse === 'object'
+                ? exceptionResponse
+                : exception.message,
             timestamp: new Date().toISOString(),
         });
     }

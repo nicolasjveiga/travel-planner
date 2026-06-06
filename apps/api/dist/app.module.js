@@ -17,6 +17,8 @@ const tourist_spot_module_1 = require("./tourist-spot/tourist-spot.module");
 const logger_middleware_1 = require("./common/middleware/logger.middleware");
 const prisma_module_1 = require("./prisma/prisma.module");
 const users_module_1 = require("./users/users.module");
+const app_controller_1 = require("./app.controller");
+const app_service_1 = require("./app.service");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -37,6 +39,8 @@ exports.AppModule = AppModule = __decorate([
             prisma_module_1.PrismaModule,
             users_module_1.UsersModule,
         ],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
