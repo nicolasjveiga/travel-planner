@@ -1,0 +1,508 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário registrado com sucesso"
+          },
+          "400": {
+            "description": "Dados de requisição inválidos"
+          },
+          "409": {
+            "description": "Email já cadastrado"
+          }
+        },
+        "summary": "Registra um novo usuário",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              },
+              "examples": {
+                "sucesso": {
+                  "summary": "Exemplo de payload válido",
+                  "value": {
+                    "email": "joao@email.com",
+                    "password": "senhaSegura123"
+                  }
+                },
+                "erro_email": {
+                  "summary": "Exemplo de payload com email inválido",
+                  "value": {
+                    "email": "joao_sem_arroba",
+                    "password": "123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login com sucesso e retorno do token JWT"
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        },
+        "summary": "Realiza login com email e senha",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/perfil": {
+      "get": {
+        "operationId": "AuthController_perfil",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Perfil retornado com sucesso"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retorna o perfil do usuário autenticado",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/admin": {
+      "get": {
+        "operationId": "AdminController_getAdminData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Dados administrativos acessados com sucesso"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "403": {
+            "description": "Proibido (requer privilégios de ADMIN)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Acessa dados administrativos (requer papel ADMIN)",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/trips": {
+      "post": {
+        "operationId": "TripsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTripDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Viagem criada com sucesso"
+          },
+          "400": {
+            "description": "Dados de requisição inválidos (ex: datas incorretas)"
+          }
+        },
+        "summary": "Cria uma nova viagem",
+        "tags": [
+          "trips"
+        ]
+      },
+      "get": {
+        "operationId": "TripsController_findAll",
+        "parameters": [
+          {
+            "name": "destination",
+            "required": false,
+            "in": "query",
+            "description": "Filtro por destino da viagem",
+            "schema": {
+              "example": "Rio de Janeiro",
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número da página de resultados",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de viagens retornada com sucesso"
+          }
+        },
+        "summary": "Lista todas as viagens com paginação e filtro por destino",
+        "tags": [
+          "trips"
+        ]
+      }
+    },
+    "/trips/{id}": {
+      "get": {
+        "operationId": "TripsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Viagem encontrada com sucesso"
+          },
+          "404": {
+            "description": "Viagem não encontrada"
+          }
+        },
+        "summary": "Busca detalhes de uma viagem pelo ID",
+        "tags": [
+          "trips"
+        ]
+      },
+      "put": {
+        "operationId": "TripsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Campos a serem atualizados na viagem",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTripDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Viagem atualizada com sucesso"
+          },
+          "400": {
+            "description": "Dados de requisição inválidos"
+          },
+          "404": {
+            "description": "Viagem não encontrada"
+          }
+        },
+        "summary": "Atualiza parcialmente uma viagem pelo ID",
+        "tags": [
+          "trips"
+        ]
+      },
+      "delete": {
+        "operationId": "TripsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Viagem removida com sucesso"
+          },
+          "404": {
+            "description": "Viagem não encontrada"
+          }
+        },
+        "summary": "Remove uma viagem pelo ID",
+        "tags": [
+          "trips"
+        ]
+      }
+    },
+    "/users": {
+      "post": {
+        "operationId": "UsersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "Dados de requisição inválidos"
+          },
+          "409": {
+            "description": "Email já cadastrado"
+          }
+        },
+        "summary": "Cria um novo usuário",
+        "tags": [
+          "users"
+        ]
+      },
+      "get": {
+        "operationId": "UsersController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários retornada com sucesso"
+          }
+        },
+        "summary": "Lista todos os usuários cadastrados",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado com sucesso"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        },
+        "summary": "Busca um usuário pelo ID",
+        "tags": [
+          "users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário removido com sucesso"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        },
+        "summary": "Remove um usuário pelo ID",
+        "tags": [
+          "users"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "API com Swagger",
+    "description": "Documentação automática da API com Swagger",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "joao@email.com",
+            "description": "Email para cadastro do novo usuário"
+          },
+          "password": {
+            "type": "string",
+            "example": "senhaSegura123",
+            "description": "Senha para o novo usuário (mínimo 6 caracteres)"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "joao@email.com",
+            "description": "Email do usuário cadastrado"
+          },
+          "password": {
+            "type": "string",
+            "example": "senhaSegura123",
+            "description": "Senha em formato texto plano"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "CreateTripDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Férias de Verão",
+            "description": "Título ou nome da viagem"
+          },
+          "destination": {
+            "type": "string",
+            "example": "Rio de Janeiro",
+            "description": "Destino da viagem"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2026-12-20T00:00:00.000Z",
+            "description": "Data de início da viagem",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "example": "2027-01-05T00:00:00.000Z",
+            "description": "Data de término da viagem",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "description": "ID do usuário associado à viagem"
+          }
+        },
+        "required": [
+          "title",
+          "destination",
+          "startDate",
+          "endDate",
+          "userId"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "nicolas@email.com",
+            "description": "Email do usuário"
+          },
+          "password": {
+            "type": "string",
+            "example": "mypassword123",
+            "description": "Senha do usuário (mínimo 6 caracteres)"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      }
+    }
+  }
+}

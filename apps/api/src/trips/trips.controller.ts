@@ -13,6 +13,7 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
 import { TripsService } from './trips.service';
 
@@ -23,6 +24,7 @@ import { TripBusinessFilter } from './filters/trip-business.filter';
 
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
+@ApiTags('trips')
 @UseFilters(TripBusinessFilter)
 @UseInterceptors(TransformInterceptor)
 @Controller('trips')
@@ -31,6 +33,9 @@ export class TripsController {
     private readonly tripsService: TripsService,
   ) { }
 
+  @ApiOperation({ summary: 'Cria uma nova viagem' })
+  @ApiResponse({ status: 201, description: 'Viagem criada com sucesso' })
+  @ApiResponse({ status: 400, description: 'Dados de requisição inválidos (ex: datas incorretas)' })
   @Post()
   async create(
     @Body() createTripDto: CreateTripDto,
@@ -38,6 +43,8 @@ export class TripsController {
     return this.tripsService.create(createTripDto);
   }
 
+  @ApiOperation({ summary: 'Lista todas as viagens com paginação e filtro por destino' })
+  @ApiResponse({ status: 200, description: 'Lista de viagens retornada com sucesso' })
   @Get()
   async findAll(
     @Query() query: QueryTripDto,
@@ -48,6 +55,9 @@ export class TripsController {
     );
   }
 
+  @ApiOperation({ summary: 'Busca detalhes de uma viagem pelo ID' })
+  @ApiResponse({ status: 200, description: 'Viagem encontrada com sucesso' })
+  @ApiResponse({ status: 404, description: 'Viagem não encontrada' })
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe)
@@ -56,6 +66,11 @@ export class TripsController {
     return this.tripsService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Atualiza parcialmente uma viagem pelo ID' })
+  @ApiBody({ type: CreateTripDto, description: 'Campos a serem atualizados na viagem' })
+  @ApiResponse({ status: 200, description: 'Viagem atualizada com sucesso' })
+  @ApiResponse({ status: 400, description: 'Dados de requisição inválidos' })
+  @ApiResponse({ status: 404, description: 'Viagem não encontrada' })
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe)
@@ -70,6 +85,9 @@ export class TripsController {
     );
   }
 
+  @ApiOperation({ summary: 'Remove uma viagem pelo ID' })
+  @ApiResponse({ status: 204, description: 'Viagem removida com sucesso' })
+  @ApiResponse({ status: 404, description: 'Viagem não encontrada' })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(

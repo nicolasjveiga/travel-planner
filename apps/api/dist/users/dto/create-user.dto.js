@@ -10,17 +10,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'nicolas@email.com',
+        description: 'Email do usuário',
+    }),
     (0, class_validator_1.IsEmail)({}, {
         message: 'Email inválido.',
     }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "email", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'mypassword123',
+        description: 'Senha do usuário (mínimo 6 caracteres)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(6, {
         message: 'A senha deve ter no mínimo 6 caracteres.',
