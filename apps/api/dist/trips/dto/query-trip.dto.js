@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QueryTripDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 class QueryTripDto {
@@ -19,6 +20,10 @@ class QueryTripDto {
 }
 exports.QueryTripDto = QueryTripDto;
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'Rio de Janeiro',
+        description: 'Filtro por destino da viagem',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)({
         message: 'O filtro deve ser uma string válida.',
@@ -27,6 +32,11 @@ __decorate([
     __metadata("design:type", String)
 ], QueryTripDto.prototype, "destination", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 1,
+        description: 'Número da página de resultados',
+        default: 1,
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsInt)({ message: 'A página deve ser um número inteiro.' }),

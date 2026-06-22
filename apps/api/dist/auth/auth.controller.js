@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const auth_service_1 = require("./auth.service");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
 const register_dto_1 = require("./dto/register.dto");
@@ -34,6 +35,10 @@ let AuthController = class AuthController {
 };
 exports.AuthController = AuthController;
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Registra um novo usuário' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Usuário registrado com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Dados de requisição inválidos' }),
+    (0, swagger_1.ApiResponse)({ status: 409, description: 'Email já cadastrado' }),
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -41,6 +46,22 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "register", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Realiza login com email e senha' }),
+    (0, swagger_1.ApiBody)({
+        type: login_dto_1.LoginDto,
+        examples: {
+            sucesso: {
+                summary: 'Exemplo de payload válido',
+                value: { email: 'joao@email.com', password: 'senhaSegura123' },
+            },
+            erro_email: {
+                summary: 'Exemplo de payload com email inválido',
+                value: { email: 'joao_sem_arroba', password: '123' },
+            },
+        },
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Login com sucesso e retorno do token JWT' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Credenciais inválidas' }),
     (0, common_1.Post)('login'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
@@ -49,6 +70,10 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Retorna o perfil do usuário autenticado' }),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Perfil retornado com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado' }),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)('perfil'),
     __param(0, (0, common_1.Req)()),
@@ -57,6 +82,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "perfil", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const roles_guard_1 = require("../auth/roles.guard");
 const roles_decorator_1 = require("../auth/roles.decorator");
@@ -23,6 +24,10 @@ let AdminController = class AdminController {
 };
 exports.AdminController = AdminController;
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Acessa dados administrativos (requer papel ADMIN)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Dados administrativos acessados com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Proibido (requer privilégios de ADMIN)' }),
     (0, common_1.Get)(),
     (0, roles_decorator_1.Roles)('ADMIN'),
     __metadata("design:type", Function),
@@ -30,6 +35,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "getAdminData", null);
 exports.AdminController = AdminController = __decorate([
+    (0, swagger_1.ApiTags)('admin'),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('admin'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard)
 ], AdminController);
