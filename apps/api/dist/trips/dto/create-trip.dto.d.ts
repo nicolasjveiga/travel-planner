@@ -3,5 +3,4 @@ export declare class CreateTripDto {
     destination: string;
     startDate: Date;
     endDate: Date;
-    userId: number;
 }

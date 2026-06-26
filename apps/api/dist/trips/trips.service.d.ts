@@ -3,7 +3,7 @@ import { CreateTripDto } from './dto/create-trip.dto';
 export declare class TripsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    create(createTripDto: CreateTripDto): Promise<{
+    create(createTripDto: CreateTripDto, user: any): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -11,7 +11,7 @@ export declare class TripsService {
         endDate: Date;
         userId: number;
     }>;
-    findAll(destination?: string, page?: number): Promise<{
+    findAll(user: any, destination?: string, page?: number): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -19,7 +19,7 @@ export declare class TripsService {
         endDate: Date;
         userId: number;
     }[]>;
-    findOne(id: number): Promise<{
+    findOne(id: number, user: any): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -27,7 +27,7 @@ export declare class TripsService {
         endDate: Date;
         userId: number;
     }>;
-    update(id: number, updateData: Partial<CreateTripDto>): Promise<{
+    update(id: number, arg2?: any, arg3?: any): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -35,7 +35,7 @@ export declare class TripsService {
         endDate: Date;
         userId: number;
     }>;
-    remove(id: number): Promise<{
+    remove(id: number, user?: any): Promise<{
         id: number;
         title: string;
         destination: string;

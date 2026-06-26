@@ -161,6 +161,11 @@
             "description": "Dados de requisição inválidos (ex: datas incorretas)"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Cria uma nova viagem",
         "tags": [
           "trips"
@@ -196,6 +201,11 @@
             "description": "Lista de viagens retornada com sucesso"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Lista todas as viagens com paginação e filtro por destino",
         "tags": [
           "trips"
@@ -223,6 +233,11 @@
             "description": "Viagem não encontrada"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Busca detalhes de uma viagem pelo ID",
         "tags": [
           "trips"
@@ -262,6 +277,11 @@
             "description": "Viagem não encontrada"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Atualiza parcialmente uma viagem pelo ID",
         "tags": [
           "trips"
@@ -287,6 +307,11 @@
             "description": "Viagem não encontrada"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Remove uma viagem pelo ID",
         "tags": [
           "trips"
@@ -469,19 +494,13 @@
             "example": "2027-01-05T00:00:00.000Z",
             "description": "Data de término da viagem",
             "format": "date-time"
-          },
-          "userId": {
-            "type": "number",
-            "example": 1,
-            "description": "ID do usuário associado à viagem"
           }
         },
         "required": [
           "title",
           "destination",
           "startDate",
-          "endDate",
-          "userId"
+          "endDate"
         ]
       },
       "CreateUserDto": {

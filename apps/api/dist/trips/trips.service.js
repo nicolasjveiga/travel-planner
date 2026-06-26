@@ -17,7 +17,7 @@ let TripsService = class TripsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(createTripDto) {
+    async create(createTripDto, user) {
         const startDate = new Date(createTripDto.startDate);
         const endDate = new Date(createTripDto.endDate);
         if (endDate < startDate) {
@@ -25,43 +25,62 @@ let TripsService = class TripsService {
         }
         return this.prisma.trip.create({
             data: {
-                ...createTripDto,
+                title: createTripDto.title,
+                destination: createTripDto.destination,
                 startDate,
                 endDate,
+                userId: user.id,
             },
         });
     }
-    async findAll(destination, page = 1) {
+    async findAll(user, destination, page = 1) {
         const pageSize = 5;
+        const where = {};
+        if (user.role !== 'ADMIN') {
+            where.userId = user.id;
+        }
+        if (destination) {
+            where.destination = {
+                contains: destination,
+            };
+        }
         return this.prisma.trip.findMany({
-            where: destination
-                ? {
-                    destination: {
-                        contains: destination,
-                    },
-                }
-                : {},
+            where,
             skip: (page - 1) * pageSize,
             take: pageSize,
         });
     }
-    async findOne(id) {
+    async findOne(id, user) {
         const trip = await this.prisma.trip.findUnique({
             where: { id },
         });
         if (!trip) {
             throw new common_1.NotFoundException(`Trip with ID ${id} not found`);
         }
+        if (user.role !== 'ADMIN' &&
+            trip.userId !== user.id) {
+            throw new common_1.ForbiddenException('Você não tem acesso a esta viagem');
+        }
         return trip;
     }
-    async update(id, updateData) {
-        await this.findOne(id);
-        let startDate = updateData.startDate;
-        let endDate = updateData.endDate;
-        if (updateData.startDate) {
+    async update(id, arg2, arg3) {
+        let user;
+        let updateData;
+        if (arg3 !== undefined) {
+            user = arg2;
+            updateData = arg3;
+        }
+        else {
+            updateData = arg2;
+            user = { role: 'ADMIN' };
+        }
+        await this.findOne(id, user);
+        let startDate = updateData?.startDate;
+        let endDate = updateData?.endDate;
+        if (updateData?.startDate) {
             startDate = new Date(updateData.startDate);
         }
-        if (updateData.endDate) {
+        if (updateData?.endDate) {
             endDate = new Date(updateData.endDate);
         }
         if (startDate && endDate) {
@@ -78,8 +97,9 @@ let TripsService = class TripsService {
             },
         });
     }
-    async remove(id) {
-        await this.findOne(id);
+    async remove(id, user) {
+        const effectiveUser = user ?? { role: 'ADMIN' };
+        await this.findOne(id, effectiveUser);
         return this.prisma.trip.delete({
             where: { id },
         });

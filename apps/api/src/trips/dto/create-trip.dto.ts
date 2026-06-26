@@ -50,13 +50,4 @@ export class CreateTripDto {
         message: 'A data final deve possuir formato válido.',
     })
     endDate: Date;
-
-    @ApiProperty({
-        example: 1,
-        description: 'ID do usuário associado à viagem',
-    })
-    @Type(() => Number)
-    @IsInt({ message: 'O userId deve ser um número inteiro.' })
-    @Min(1, { message: 'O userId deve ser maior que 0.' })
-    userId: number;
 }

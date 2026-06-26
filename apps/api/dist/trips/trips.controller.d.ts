@@ -4,7 +4,7 @@ import { CreateTripDto } from './dto/create-trip.dto';
 export declare class TripsController {
     private readonly tripsService;
     constructor(tripsService: TripsService);
-    create(createTripDto: CreateTripDto): Promise<{
+    create(createTripDto: CreateTripDto, req?: any): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -12,7 +12,7 @@ export declare class TripsController {
         endDate: Date;
         userId: number;
     }>;
-    findAll(query: QueryTripDto): Promise<{
+    findAll(query: QueryTripDto, req?: any): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -20,7 +20,7 @@ export declare class TripsController {
         endDate: Date;
         userId: number;
     }[]>;
-    findOne(id: number): Promise<{
+    findOne(id: number, req?: any): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -28,7 +28,7 @@ export declare class TripsController {
         endDate: Date;
         userId: number;
     }>;
-    update(id: number, updateData: Partial<CreateTripDto>): Promise<{
+    update(id: number, updateData: Partial<CreateTripDto>, req?: any): Promise<{
         id: number;
         title: string;
         destination: string;
@@ -36,7 +36,7 @@ export declare class TripsController {
         endDate: Date;
         userId: number;
     }>;
-    remove(id: number): Promise<{
+    remove(id: number, req?: any): Promise<{
         id: number;
         title: string;
         destination: string;
