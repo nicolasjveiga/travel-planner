@@ -17,6 +17,12 @@ describe('TripsService', () => {
     userId: 1,
   };
 
+  const mockUser = {
+    id: 1,
+    email: 'teste@email.com',
+    role: 'USER',
+  };
+
   const mockPrismaService = {
     trip: {
       create: jest.fn(),
@@ -54,18 +60,18 @@ describe('TripsService', () => {
         destination: 'Paris',
         startDate: new Date('2026-07-01'),
         endDate: new Date('2026-07-15'),
-        userId: 1,
       };
 
       mockPrismaService.trip.create.mockResolvedValue(mockTrip);
 
-      const result = await service.create(createTripDto);
+      const result = await service.create(createTripDto, mockUser);
 
       expect(prisma.trip.create).toHaveBeenCalledWith({
         data: {
           ...createTripDto,
           startDate: new Date(createTripDto.startDate),
           endDate: new Date(createTripDto.endDate),
+          userId: mockUser.id,
         },
       });
       expect(result).toEqual(mockTrip);
@@ -80,7 +86,7 @@ describe('TripsService', () => {
         userId: 1,
       };
 
-      await expect(service.create(createTripDto)).rejects.toThrow(
+      await expect(service.create(createTripDto, mockUser)).rejects.toThrow(
         InvalidTripDateException,
       );
       expect(prisma.trip.create).not.toHaveBeenCalled();
@@ -92,10 +98,10 @@ describe('TripsService', () => {
       const tripsList = [mockTrip];
       mockPrismaService.trip.findMany.mockResolvedValue(tripsList);
 
-      const result = await service.findAll();
+      const result = await service.findAll(mockUser);
 
       expect(prisma.trip.findMany).toHaveBeenCalledWith({
-        where: {},
+        where: { userId: mockUser.id },
         skip: 0,
         take: 5,
       });
@@ -106,13 +112,14 @@ describe('TripsService', () => {
       const tripsList = [mockTrip];
       mockPrismaService.trip.findMany.mockResolvedValue(tripsList);
 
-      const result = await service.findAll('Paris', 2);
+      const result = await service.findAll(mockUser, 'Paris', 2);
 
       expect(prisma.trip.findMany).toHaveBeenCalledWith({
         where: {
           destination: {
             contains: 'Paris',
           },
+          userId: mockUser.id,
         },
         skip: 5,
         take: 5,
@@ -125,7 +132,7 @@ describe('TripsService', () => {
     it('should return a trip when found', async () => {
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
 
-      const result = await service.findOne(1);
+      const result = await service.findOne(1, mockUser);
 
       expect(prisma.trip.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
@@ -136,7 +143,7 @@ describe('TripsService', () => {
     it('should throw NotFoundException when trip is not found', async () => {
       mockPrismaService.trip.findUnique.mockResolvedValue(null);
 
-      await expect(service.findOne(99)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(99, mockUser)).rejects.toThrow(NotFoundException);
       expect(prisma.trip.findUnique).toHaveBeenCalledWith({
         where: { id: 99 },
       });
@@ -149,6 +156,11 @@ describe('TripsService', () => {
         title: 'Viagem Atualizada',
         startDate: new Date('2026-07-02'),
         endDate: new Date('2026-07-14'),
+      };
+      const mockUser = {
+        id: 1,
+        email: 'teste@email.com',
+        role: 'USER',
       };
 
       const updatedTrip = { ...mockTrip, ...updateData };

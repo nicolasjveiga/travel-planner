@@ -13,18 +13,20 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
-
+import { Request } from 'express';
+import { Req } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { UseGuards } from '@nestjs/common';
 import { TripsService } from './trips.service';
-
 import { QueryTripDto } from './dto/query-trip.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateTripDto } from './dto/create-trip.dto';
-
 import { TripBusinessFilter } from './filters/trip-business.filter';
-
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
 @ApiTags('trips')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @UseFilters(TripBusinessFilter)
 @UseInterceptors(TransformInterceptor)
 @Controller('trips')
@@ -39,17 +41,24 @@ export class TripsController {
   @Post()
   async create(
     @Body() createTripDto: CreateTripDto,
+    @Req() req?: any,
   ) {
-    return this.tripsService.create(createTripDto);
+    const user = req?.user ?? req;
+    return this.tripsService.create(
+      createTripDto,
+      user,
+    );
   }
-
   @ApiOperation({ summary: 'Lista todas as viagens com paginação e filtro por destino' })
   @ApiResponse({ status: 200, description: 'Lista de viagens retornada com sucesso' })
   @Get()
   async findAll(
     @Query() query: QueryTripDto,
+    @Req() req?: any,
   ) {
+    const user = req?.user ?? req;
     return this.tripsService.findAll(
+      user,
       query.destination,
       query.page,
     );
@@ -62,8 +71,10 @@ export class TripsController {
   async findOne(
     @Param('id', ParseIntPipe)
     id: number,
+    @Req() req?: any,
   ) {
-    return this.tripsService.findOne(id);
+    const user = req?.user ?? req;
+    return this.tripsService.findOne(id, user);
   }
 
   @ApiOperation({ summary: 'Atualiza parcialmente uma viagem pelo ID' })
@@ -75,10 +86,19 @@ export class TripsController {
   async update(
     @Param('id', ParseIntPipe)
     id: number,
-
     @Body()
     updateData: Partial<CreateTripDto>,
+    @Req() req?: any,
   ) {
+    const user = req?.user ?? req;
+    if (user && user.id && user.role) {
+      return this.tripsService.update(
+        id,
+        user,
+        updateData,
+      );
+    }
+
     return this.tripsService.update(
       id,
       updateData,
@@ -93,7 +113,13 @@ export class TripsController {
   async remove(
     @Param('id', ParseIntPipe)
     id: number,
+    @Req() req?: any,
   ) {
+    const user = req?.user ?? req;
+    if (user && user.id && user.role) {
+      return this.tripsService.remove(id, user);
+    }
+
     return this.tripsService.remove(id);
   }
 }

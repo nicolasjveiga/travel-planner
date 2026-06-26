@@ -61,14 +61,4 @@ __decorate([
     }),
     __metadata("design:type", Date)
 ], CreateTripDto.prototype, "endDate", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 1,
-        description: 'ID do usuário associado à viagem',
-    }),
-    (0, class_transformer_1.Type)(() => Number),
-    (0, class_validator_1.IsInt)({ message: 'O userId deve ser um número inteiro.' }),
-    (0, class_validator_1.Min)(1, { message: 'O userId deve ser maior que 0.' }),
-    __metadata("design:type", Number)
-], CreateTripDto.prototype, "userId", void 0);
 //# sourceMappingURL=create-trip.dto.js.map

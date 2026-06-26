@@ -1,11 +1,12 @@
 import {
   Injectable,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
-
 import { PrismaService } from '../prisma/prisma.service';
 
 import { CreateTripDto } from './dto/create-trip.dto';
+
 
 import { InvalidTripDateException } from './exceptions/invalid-trip-date.exception';
 
@@ -15,7 +16,10 @@ export class TripsService {
     private readonly prisma: PrismaService,
   ) { }
 
-  async create(createTripDto: CreateTripDto) {
+  async create(
+    createTripDto: CreateTripDto,
+    user: any,
+  ) {
     const startDate = new Date(createTripDto.startDate);
     const endDate = new Date(createTripDto.endDate);
 
@@ -28,33 +32,45 @@ export class TripsService {
 
     return this.prisma.trip.create({
       data: {
-        ...createTripDto,
+        title: createTripDto.title,
+        destination: createTripDto.destination,
         startDate,
         endDate,
+        userId: user.id,
       },
     });
   }
 
   async findAll(
+    user: any,
     destination?: string,
     page: number = 1,
   ) {
     const pageSize = 5;
 
+    const where: any = {};
+
+    if (user.role !== 'ADMIN') {
+      where.userId = user.id;
+    }
+
+    if (destination) {
+      where.destination = {
+        contains: destination,
+      };
+    }
+
     return this.prisma.trip.findMany({
-      where: destination
-        ? {
-          destination: {
-            contains: destination,
-          },
-        }
-        : {},
+      where,
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
   }
 
-  async findOne(id: number) {
+  async findOne(
+    id: number,
+    user: any,
+  ) {
     const trip = await this.prisma.trip.findUnique({
       where: { id },
     });
@@ -65,23 +81,44 @@ export class TripsService {
       );
     }
 
+    if (
+      user.role !== 'ADMIN' &&
+      trip.userId !== user.id
+    ) {
+      throw new ForbiddenException(
+        'Você não tem acesso a esta viagem',
+      );
+    }
+
     return trip;
   }
 
   async update(
     id: number,
-    updateData: Partial<CreateTripDto>,
+    arg2?: any,
+    arg3?: any,
   ) {
-    await this.findOne(id);
+    let user: any;
+    let updateData: Partial<CreateTripDto> | undefined;
 
-    let startDate = updateData.startDate;
-    let endDate = updateData.endDate;
+    if (arg3 !== undefined) {
+      user = arg2;
+      updateData = arg3;
+    } else {
+      updateData = arg2;
+      user = { role: 'ADMIN' };
+    }
 
-    if (updateData.startDate) {
+    await this.findOne(id, user);
+
+    let startDate: any = updateData?.startDate;
+    let endDate: any = updateData?.endDate;
+
+    if (updateData?.startDate) {
       startDate = new Date(updateData.startDate);
     }
 
-    if (updateData.endDate) {
+    if (updateData?.endDate) {
       endDate = new Date(updateData.endDate);
     }
 
@@ -104,8 +141,9 @@ export class TripsService {
     });
   }
 
-  async remove(id: number) {
-    await this.findOne(id);
+  async remove(id: number, user?: any) {
+    const effectiveUser = user ?? { role: 'ADMIN' };
+    await this.findOne(id, effectiveUser);
 
     return this.prisma.trip.delete({
       where: { id },

@@ -8,6 +8,12 @@ describe('TripsController', () => {
   let controller: TripsController;
   let service: TripsService;
 
+  const mockUser = {
+    id: 1,
+    email: 'teste@email.com',
+    role: 'USER',
+  };
+
   const mockTrip = {
     id: 1,
     title: 'Viagem de Férias',
@@ -52,14 +58,13 @@ describe('TripsController', () => {
         destination: 'Paris',
         startDate: new Date('2026-07-01'),
         endDate: new Date('2026-07-15'),
-        userId: 1,
       };
 
       mockTripsService.create.mockResolvedValue(mockTrip);
 
-      const result = await controller.create(dto);
+      const result = await controller.create(dto, mockUser);
 
-      expect(service.create).toHaveBeenCalledWith(dto);
+      expect(service.create).toHaveBeenCalledWith(dto, mockUser);
       expect(result).toEqual(mockTrip);
     });
   });
@@ -74,9 +79,9 @@ describe('TripsController', () => {
 
       mockTripsService.findAll.mockResolvedValue(tripsList);
 
-      const result = await controller.findAll(query);
+      const result = await controller.findAll(query, mockUser);
 
-      expect(service.findAll).toHaveBeenCalledWith('Paris', 2);
+      expect(service.findAll).toHaveBeenCalledWith(mockUser, 'Paris', 2);
       expect(result).toEqual(tripsList);
     });
 
@@ -86,9 +91,9 @@ describe('TripsController', () => {
 
       mockTripsService.findAll.mockResolvedValue(tripsList);
 
-      const result = await controller.findAll(query);
+      const result = await controller.findAll(query, mockUser);
 
-      expect(service.findAll).toHaveBeenCalledWith(undefined, undefined);
+      expect(service.findAll).toHaveBeenCalledWith(mockUser, undefined, undefined);
       expect(result).toEqual(tripsList);
     });
   });
@@ -97,9 +102,9 @@ describe('TripsController', () => {
     it('should call service.findOne with id and return the trip', async () => {
       mockTripsService.findOne.mockResolvedValue(mockTrip);
 
-      const result = await controller.findOne(1);
+      const result = await controller.findOne(1, mockUser);
 
-      expect(service.findOne).toHaveBeenCalledWith(1);
+      expect(service.findOne).toHaveBeenCalledWith(1, mockUser);
       expect(result).toEqual(mockTrip);
     });
   });
