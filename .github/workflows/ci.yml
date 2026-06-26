@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Test (node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies (apps/api)
+        working-directory: apps/api
+        run: npm ci
+
+      - name: Run lint (apps/api)
+        working-directory: apps/api
+        run: npm run lint
+
+      - name: Run tests (apps/api)
+        working-directory: apps/api
+        env:
+          CI: true
+        run: npm test --silent
