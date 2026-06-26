@@ -54,11 +54,34 @@ class ApiService {
 
     if (!response.ok) {
       // Handle standard NestJS validation/exception formats
-      const errorMessage = result?.message
-        ? Array.isArray(result.message)
-          ? result.message.join(', ')
-          : result.message
-        : 'Ocorreu um erro inesperado';
+      const errorMessage = (() => {
+        const message = result?.message;
+
+        if (typeof message === 'string') {
+          return message;
+        }
+
+        if (Array.isArray(message)) {
+          return message.join(', ');
+        }
+
+        if (message && typeof message === 'object') {
+          if (Array.isArray(message.message)) {
+            return message.message.join(', ');
+          }
+
+          if (typeof message.message === 'string') {
+            return message.message;
+          }
+
+          if (typeof message.error === 'string') {
+            return message.error;
+          }
+        }
+
+        return 'Ocorreu um erro inesperado';
+      })();
+
       throw new Error(errorMessage);
     }
 

@@ -18,7 +18,8 @@ import {
   TrendingUp,
   Map,
   CheckCircle2,
-  CalendarDays
+  CalendarDays,
+  ShieldCheck,
 } from "lucide-react";
 
 interface Trip {
@@ -276,6 +277,15 @@ export default function DashboardPage() {
             <span className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">Conta ativa</span>
             <span className="text-sm text-zinc-300 font-medium">{user?.email}</span>
           </div>
+          {user?.role === 'ADMIN' && (
+            <button
+              onClick={() => router.push('/admin')}
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-cyan-500/10 hover:border-cyan-500/20 hover:text-cyan-300 transition-all duration-300 text-sm font-semibold cursor-pointer"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span>Admin</span>
+            </button>
+          )}
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400 transition-all duration-300 text-sm font-semibold cursor-pointer"
